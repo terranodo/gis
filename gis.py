@@ -135,14 +135,15 @@ loop = asyncio.get_event_loop()
 coro = loop.create_server(H2Protocol, '127.0.0.1', 8443, ssl=ssl_context)
 server = loop.run_until_complete(coro)
 
-# Serve requests until Ctrl+C is pressed
-print('Serving on {}'.format(server.sockets[0].getsockname()))
-try:
-    loop.run_forever()
-except KeyboardInterrupt:
-    pass
+if __name__ == "__main__":
+    # Serve requests until Ctrl+C is pressed
+    print('Serving on {}'.format(server.sockets[0].getsockname()))
+    try:
+        loop.run_forever()
+    except KeyboardInterrupt:
+        pass
 
-# Close the server
-server.close()
-loop.run_until_complete(server.wait_closed())
+    # Close the server
+    server.close()
+    loop.run_until_complete(server.wait_closed())
 loop.close()
