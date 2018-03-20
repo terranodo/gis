@@ -22,4 +22,7 @@ coverage:
 flake:
 	pipenv run flake8
 
+release: coverage flake
+	pipenv run python setup.py sdist upload --repository=https://upload.pypi.org/legacy/
+
 .PHONY: help activate test
