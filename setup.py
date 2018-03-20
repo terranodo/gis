@@ -1,15 +1,15 @@
 from distutils.core import setup
 
 setup(
-    name='asyncgeo',
+    name='gis',
     version='0.1',
-    url='http://github.com/terranodo/asyncgeo',
+    url='http://github.com/terranodo/gis',
     license='MIT',
     author='Ariel Nunez',
     author_email='ingenieroariel@gmail.com',
     description='async + http2 + postgis + openapi + geo+json-seq',
-    long_description=open('README.md').read(),
-    py_modules=['asyncgeo'],
+    long_description=open('README').read(),
+    py_modules=['gis'],
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Developers',
