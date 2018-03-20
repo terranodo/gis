@@ -12,7 +12,6 @@ gisdata = "*"
 coveralls = "*"
 
 [packages]
-asyncpg = "*"
 asyncio = "*"
 "h2" = "*"
 "e1839a8" = {editable = true, path = "."}

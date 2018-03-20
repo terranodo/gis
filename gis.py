@@ -11,6 +11,8 @@ import io
 import json
 import ssl
 import collections
+import argparse
+
 from typing import List, Tuple
 
 from h2.config import H2Configuration
@@ -121,6 +123,7 @@ class H2Protocol(asyncio.Protocol):
         else:
             stream_data.data.write(data)
 
+
 def get_ssl_context(certfile="cert.crt", keyfile="cert.key"):
     ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
     ssl_context.options |= (
@@ -131,6 +134,7 @@ def get_ssl_context(certfile="cert.crt", keyfile="cert.key"):
     ssl_context.set_alpn_protocols(["h2"])
     return ssl_context
 
+
 def get_server(host='127.0.0.1', port=8443,
                ssl_context=ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)):
     loop = asyncio.get_event_loop()
@@ -140,7 +144,7 @@ def get_server(host='127.0.0.1', port=8443,
     return server, loop
 
 
-if __name__ == "__main__":
+def run():
     ssl_context = get_ssl_context()
     server, loop = get_server(ssl_context=ssl_context)
 
@@ -155,3 +159,13 @@ if __name__ == "__main__":
     server.close()
     loop.run_until_complete(server.wait_closed())
     loop.close()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='GIS data server.')
+    parser.add_argument('command', metavar='command',
+                        help='Command to be run. Options are: ["run",]')
+
+    args = parser.parse_args()
+    if args.command == 'run':
+        run()
