@@ -1,5 +1,7 @@
 Opinionated Python + Postgis GIS.
 
+EXPERIMENT ONLY *NOT* FOR PRODUCTION
+
 Features:
 
 - [ ] PostGIS Geography columns
