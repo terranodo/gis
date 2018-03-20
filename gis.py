@@ -121,21 +121,29 @@ class H2Protocol(asyncio.Protocol):
         else:
             stream_data.data.write(data)
 
+def get_ssl_context(certfile="cert.crt", keyfile="cert.key"):
+    ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    ssl_context.options |= (
+        ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_COMPRESSION
+    )
+    ssl_context.set_ciphers("ECDHE+AESGCM")
+    ssl_context.load_cert_chain(certfile=certfile, keyfile=keyfile)
+    ssl_context.set_alpn_protocols(["h2"])
+    return ssl_context
 
-ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-ssl_context.options |= (
-    ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_COMPRESSION
-)
-ssl_context.set_ciphers("ECDHE+AESGCM")
-ssl_context.load_cert_chain(certfile="cert.crt", keyfile="cert.key")
-ssl_context.set_alpn_protocols(["h2"])
+def get_server(host='127.0.0.1', port=8443,
+               ssl_context=ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)):
+    loop = asyncio.get_event_loop()
+    # Each client connection will create a new protocol instance
+    coro = loop.create_server(H2Protocol, host, port, ssl=ssl_context)
+    server = loop.run_until_complete(coro)
+    return server, loop
 
-loop = asyncio.get_event_loop()
-# Each client connection will create a new protocol instance
-coro = loop.create_server(H2Protocol, '127.0.0.1', 8443, ssl=ssl_context)
-server = loop.run_until_complete(coro)
 
 if __name__ == "__main__":
+    ssl_context = get_ssl_context()
+    server, loop = get_server(ssl_context=ssl_context)
+
     # Serve requests until Ctrl+C is pressed
     print('Serving on {}'.format(server.sockets[0].getsockname()))
     try:
@@ -146,4 +154,4 @@ if __name__ == "__main__":
     # Close the server
     server.close()
     loop.run_until_complete(server.wait_closed())
-loop.close()
+    loop.close()
