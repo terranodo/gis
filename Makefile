@@ -16,4 +16,7 @@ activate:
 test:
 	pipenv run python test.py
 
+coverage:
+	pipenv run -- coverage run --source=gis test.py
+
 .PHONY: help activate test
