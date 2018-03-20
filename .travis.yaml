@@ -9,4 +9,11 @@ env:
 # command to install dependencies
 install: make setup
 # # command to run tests
-script: make test
+script:
+ - make coverage
+
+after_script:
+ - make flake
+
+after_success:
+  - coveralls
