@@ -19,4 +19,7 @@ test:
 coverage:
 	pipenv run -- coverage run --source=gis test.py
 
+flake:
+	pipenv run flake8
+
 .PHONY: help activate test
