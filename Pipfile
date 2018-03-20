@@ -12,3 +12,4 @@ python_version = "3.5"
 asyncpg = "*"
 asyncio = "*"
 "h2" = "*"
+"e1839a8" = {editable = true, path = "."}
