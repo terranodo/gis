@@ -11,8 +11,7 @@ setup(
     long_description=open('README').read(),
     py_modules=['gis'],
     install_requires=[
-        'h2',
-        'asyncio',
+        'pyh2o',
     ],
     classifiers=[
         'Development Status :: 1 - Planning',

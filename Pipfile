@@ -12,6 +12,5 @@ gisdata = "*"
 coveralls = "*"
 
 [packages]
-asyncio = "*"
-"h2" = "*"
 "e1839a8" = {editable = true, path = "."}
+"pyh2o" = "*"
