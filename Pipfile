@@ -14,3 +14,5 @@ coveralls = "*"
 [packages]
 "e1839a8" = {editable = true, path = "."}
 "pyh2o" = "*"
+setuptools-rust = "*"
+"9bc31a3" = {path = "./../noise/noise/pyext-noise/ruido-0.2-cp35-cp35m-linux_x86_64.whl"}

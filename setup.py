@@ -12,6 +12,7 @@ setup(
     py_modules=['gis'],
     install_requires=[
         'pyh2o',
+        'ruido',
     ],
     classifiers=[
         'Development Status :: 1 - Planning',

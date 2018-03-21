@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "75ffe1dfb8fa3d14c54c8fac6dd2d2e364079253cbed7c673b9d19285429bd1e"
+            "sha256": "905029ee49e4a0f7653ef61d7f5c009d1659ceb74a8936273b38ece4c8b22a19"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,9 @@
         ]
     },
     "default": {
+        "9bc31a3": {
+            "path": "./../noise/noise/pyext-noise/ruido-0.2-cp35-cp35m-linux_x86_64.whl"
+        },
         "cython": {
             "hashes": [
                 "sha256:0a44c3645a84724d4f7f7c1126f3807cad14271f210bb1a9a15bfd330c8d20b9",
@@ -68,6 +71,20 @@
             ],
             "index": "pypi",
             "version": "==0.0.6"
+        },
+        "semantic-version": {
+            "hashes": [
+                "sha256:2a4328680073e9b243667b201119772aefc5fc63ae32398d6afafff07c4f54c0",
+                "sha256:2d06ab7372034bcb8b54f2205370f4aa0643c133b7e6dbd129c5200b83ab394b"
+            ],
+            "version": "==2.6.0"
+        },
+        "setuptools-rust": {
+            "hashes": [
+                "sha256:79775699da34fdb4cc003457f757d6bd0655230bbce16cd85ad104b630eb0d65"
+            ],
+            "index": "pypi",
+            "version": "==0.8.4"
         }
     },
     "develop": {
