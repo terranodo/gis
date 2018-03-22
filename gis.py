@@ -19,12 +19,19 @@ def index(args):
     """Add data to the index
     """
     directory = args.dir
-    vector = glob.glob(os.path.join(directory, '**', '*.json'), recursive=True)
-    raster = glob.glob(os.path.join(directory, '**', '*.tiff'), recursive=True)
+    vectors = glob.glob(os.path.join(directory, '**', '*.json'), recursive=True)
+    rasters = glob.glob(os.path.join(directory, '**', '*.tiff'), recursive=True)
     if args.verbose:
         print("Indexing %s" % directory)
-        print("Vector: %s" % vector)
-        print("Raster: %s" % raster)  
+        print("Vectors: %s" % vectors)
+        print("Rasters: %s" % rasters)  
+
+    for vector in vectors:
+        with open(vector, 'r') as v:
+            for item_raw in v:
+                item = item_raw.strip(u'\u001e')
+                ruido.add(os.path.join(".index", vector), item)
+
     return "[]"
 
 
