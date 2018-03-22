@@ -10,11 +10,21 @@ import h2o
 import ruido
 import socket
 import argparse
+import sys
+import glob
+import os
 
 
 def index(args):
     """Add data to the index
     """
+    directory = args.dir
+    vector = glob.glob(os.path.join(directory, '**', '*.json'), recursive=True)
+    raster = glob.glob(os.path.join(directory, '**', '*.tiff'), recursive=True)
+    if args.verbose:
+        print("Indexing %s" % directory)
+        print("Vector: %s" % vector)
+        print("Raster: %s" % raster)  
     return "[]"
 
 
@@ -50,20 +60,21 @@ def run(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Vector, raster and maps',
-                                     epilogue='Because features and pixels matter.')
+    parser = argparse.ArgumentParser(description='Vector, raster and maps')
     subparsers = parser.add_subparsers(help='Command to be run')
 
     parser_run = subparsers.add_parser('run', help='Run http service')
-    parser_run.add_argument('-port', type=int, default=8443)
-    parser_run.add_argument('-host', default='127.0.0.1')
+    parser_run.add_argument('--port', type=int, default=8443)
+    parser_run.add_argument('--host', default='127.0.0.1')
     parser_run.set_defaults(func=run)
 
     parser_index = subparsers.add_parser('index', help='Index vector or raster data')
-    parser_index.add_argument('-dir', default='.')
+    parser_index.add_argument('--dir', default='.')
+    parser_index.add_argument('--verbose', dest='verbose', action='store_true')
+    parser.set_defaults(verbose=False)
     parser_index.set_defaults(func=index)
 
-    parser_query = subparsers.add_parser('run', help='Run http service')
+    parser_query = subparsers.add_parser('query', help='Query the gis database')
     parser_query.add_argument('-index', default='.catalog')
     parser_query.add_argument('-query', default='find {}')
     parser_query.set_defaults(func=query)
@@ -75,7 +86,7 @@ if __name__ == "__main__":
     # the general help.
     if not hasattr(args, 'func'):
         parser.print_help()
-
+        sys.exit("No command supplied")
     # Invokes the implementation for the command with the arguments defined
     # in the subparser.
     args.func(args)

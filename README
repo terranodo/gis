@@ -2,13 +2,15 @@ Opinionated Python + Postgis GIS.
 
 EXPERIMENT ONLY *NOT* FOR PRODUCTION
 
+Usage:
+
+pip install gis
+python -m gis index -file=myvector.geojson
+python -m gis index -file=myraster.tif
+python -m gis run 
+
 Features:
 
-- [ ] PostGIS Geography columns
-- [ ] HTTP2 only
-- [ ] Async I/O
-- [ ] jsonb storage
-- [ ] TopoJSON sequences output
 - [ ] OpenAPI 3.0 compliant
 - [ ] Provides access to features
 - [ ] Provides access to layers (collection of features)
