@@ -10,10 +10,6 @@ setup(
     description='async + http2 + postgis + openapi + geo+json-seq',
     long_description=open('README').read(),
     py_modules=['gis'],
-    install_requires=[
-        'pyh2o',
-        'ruido',
-    ],
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Developers',

@@ -6,18 +6,18 @@ gis.py
 Minimal vector, raster and map serving over HTTP2
 
 """
-import h2o
-import ruido
 import socket
 import argparse
 import sys
 import glob
 import os
+import http
 
 
 def index(args):
     """Add data to the index
     """
+    import ruido
     directory = args.dir
     vectors = glob.glob(os.path.join(directory, '**', '*.json'), recursive=True)
     rasters = glob.glob(os.path.join(directory, '**', '*.tiff'), recursive=True)
@@ -38,42 +38,32 @@ def index(args):
 def query(args):
     """Query the existing index
     """
+    import ruido
+    ruido.query('.index', 'find {} return .')
     return "[]"
 
 
-def run(args):
+def server(args):
     """Runs openapi compatible service to serve the data
     """
-    # sample h2o handler
-    class Handler(h2o.Handler):
-        def on_req(self):
-            self.res_status = 200
-            self.send_inline(b'Hello, world!')
-            return 0
-
-    config = h2o.Config()
-    host = config.add_host(b'default', 65535)
-    host.add_path(b'/').add_handler(Handler)
-
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
-    sock.bind((args.host, args.port))
-    sock.listen(0)
-
-    loop = h2o.Loop()
-    loop.start_accept(sock.fileno(), config)
-    while loop.run() == 0:
-        pass
-
+    handler_class = http.server.SimpleHTTPRequestHandler
+    test(HandlerClass=handler_class, port=args.port, bind=args.bind)    
+    
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Vector, raster and maps')
     subparsers = parser.add_subparsers(help='Command to be run')
 
-    parser_run = subparsers.add_parser('run', help='Run http service')
-    parser_run.add_argument('--port', type=int, default=8443)
-    parser_run.add_argument('--host', default='127.0.0.1')
-    parser_run.set_defaults(func=run)
+    parser_server = subparsers.add_parser('server', help='Run http service')
+    parser_server.add_argument('--bind', '-b', default='', metavar='ADDRESS',
+                        help='Specify alternate bind address '
+                             '[default: all interfaces]')
+    parser_server.add_argument('port', action='store',
+                        default=8443, type=int,
+                        nargs='?',
+                        help='Specify alternate port [default: 8443]')
+
+    parser_server.set_defaults(func=server)
 
     parser_index = subparsers.add_parser('index', help='Index vector or raster data')
     parser_index.add_argument('--dir', default='.')
