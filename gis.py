@@ -6,12 +6,11 @@ gis.py
 Minimal vector, raster and map serving over HTTP2
 
 """
-import socket
 import argparse
 import sys
 import glob
 import os
-import http
+from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 
 def index(args):
@@ -24,7 +23,7 @@ def index(args):
     if args.verbose:
         print("Indexing %s" % directory)
         print("Vectors: %s" % vectors)
-        print("Rasters: %s" % rasters)  
+        print("Rasters: %s" % rasters)
 
     for vector in vectors:
         with open(vector, 'r') as v:
@@ -46,9 +45,20 @@ def query(args):
 def server(args):
     """Runs openapi compatible service to serve the data
     """
-    handler_class = http.server.SimpleHTTPRequestHandler
-    test(HandlerClass=handler_class, port=args.port, bind=args.bind)    
-    
+    SimpleHTTPRequestHandler.protocol_version = args.protocol
+    httpd = HTTPServer((args.bind, args.port), SimpleHTTPRequestHandler)
+
+    if args.verbose:
+        sa = httpd.socket.getsockname()
+        print("Serving GIS on", sa[0], "port", sa[1], "...")
+
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nKeyboard interrupt received, exiting.")
+        httpd.server_close()
+        sys.exit(0)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Vector, raster and maps')
@@ -56,19 +66,24 @@ if __name__ == "__main__":
 
     parser_server = subparsers.add_parser('server', help='Run http service')
     parser_server.add_argument('--bind', '-b', default='', metavar='ADDRESS',
-                        help='Specify alternate bind address '
-                             '[default: all interfaces]')
-    parser_server.add_argument('port', action='store',
-                        default=8443, type=int,
-                        nargs='?',
-                        help='Specify alternate port [default: 8443]')
+                               help='Specify alternate bind address '
+                               '[default: all interfaces]')
+    parser_server.add_argument('--port', '-p', action='store',
+                               default=8443, type=int,
+                               nargs='?',
+                               help='Specify alternate port [default: 8443]')
 
+    parser_server.add_argument('--protocol', default='HTTP/1.0', metavar='PROTOCOL',
+                               help='Specify HTTP protocol'
+                               '[default: HTTP/1.0]')
+    parser_server.add_argument('--verbose', dest='verbose', action='store_true')
+    parser_server.set_defaults(verbose=False)
     parser_server.set_defaults(func=server)
 
     parser_index = subparsers.add_parser('index', help='Index vector or raster data')
     parser_index.add_argument('--dir', default='.')
     parser_index.add_argument('--verbose', dest='verbose', action='store_true')
-    parser.set_defaults(verbose=False)
+    parser_index.set_defaults(verbose=False)
     parser_index.set_defaults(func=index)
 
     parser_query = subparsers.add_parser('query', help='Query the gis database')
