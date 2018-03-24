@@ -16,4 +16,4 @@ after_script:
  - make flake
 
 after_success:
-  - python -c "from coveralls.cli import main; print main();"
+  - python -c "from coveralls.cli import main; print(main())"
