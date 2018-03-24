@@ -16,4 +16,4 @@ after_script:
  - make flake
 
 after_success:
-  - pipenv run python -c "from coveralls.cli import main; print(main())"
+  - make send_coverage
