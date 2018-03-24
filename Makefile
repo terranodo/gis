@@ -25,4 +25,7 @@ flake:
 release: coverage flake
 	pipenv run python setup.py sdist upload --repository=https://upload.pypi.org/legacy/
 
-.PHONY: help activate test
+send_coverage:
+	pipenv run python -c "from coveralls.cli import main;print(main());"
+
+.PHONY: help setup activate test coverage flake release send_coverage
