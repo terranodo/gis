@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='gis',
-    version='0.2',
+    version='0.2.1',
     url='http://github.com/terranodo/gis',
     license='MIT',
     author='Ariel Nunez',
