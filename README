@@ -23,7 +23,7 @@ Features:
 /map/<id>
 /api
 /<layer_name>/<id>
-/precipitation/ <- stac catlog of folders
+/precipitation/ <- stac catalog of folders
 /precipitation/<folder>/LC08_20171112_120012/ <- stac item for this dataset with overviews, etc and links to the actual geotiff.
 /precipitation/<folder>/LC08_20171112_120012/ <- stac item for this dataset with overviews, etc and links to the actual geotiff.
 /precipitation/<folder>/LC08_20171112_120012/1.tif <- cloud optimized geotiff
